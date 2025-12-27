@@ -27,7 +27,7 @@ public class GUI extends JFrame implements KeyListener {
 
         drawMap();
 
-        setTitle("Titanic - NívelX");
+        setTitle("Titanic - Nível " + (engine.getCurrentLevel() + 1));
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(panel);
@@ -106,8 +106,24 @@ public class GUI extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
-        // TODO: fazer o que acontece quando se toca nas setas
+        Boat boat = map.getBoat();
+        int row = boat.getRow();
+        int col = boat.getCol();
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+                map.moveBoat(row, col - 1);
+                break;
+            case KeyEvent.VK_RIGHT:
+                map.moveBoat(row, col + 1);
+                break;
+            case KeyEvent.VK_UP:
+                map.moveBoat(row - 1, col);
+                break;
+            case KeyEvent.VK_DOWN:
+                map.moveBoat(row + 1, col);
+                break;
+        }
+        drawMap();
     }
 
     @Override public void keyReleased(KeyEvent e) {}

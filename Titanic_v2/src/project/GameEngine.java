@@ -15,11 +15,18 @@ public class GameEngine {
     }
 
     public void loadLevel(int levelIndex) {
-        // carrega o nivel
+        if (levelIndex < levelFiles.size()) {
+            currentLevel = levelIndex;
+            currentMap = new Map(levelFiles.get(levelIndex));
+        }
     }
 
     public void nextLevel() {
         //TODO: Muda o nivel
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
     }
 
     public Map getCurrentMap() {

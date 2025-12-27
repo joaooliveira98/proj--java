@@ -1,6 +1,7 @@
 package project;
 
 import java.util.*;
+import java.io.*;
 
 public class Map {
 
@@ -14,14 +15,28 @@ public class Map {
 
     private ArrayList<String> loadMap(String path) {
         ArrayList<String> lines = new ArrayList<>();
-
-        // TODO: ler o ficheiro do mapa e guardar num arraylist
-
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(path));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return lines;
     }
 
    private void findBoatPosition() {
-    // TODO: procura o boat 
+        for (int r = 0; r < grid.size(); r++) {
+            for (int c = 0; c < grid.get(r).length(); c++) {
+                if (grid.get(r).charAt(c) == 'B') {
+                    boat = new Boat(r, c);
+                    return;
+                }
+            }
+        }
     }
 
     public ArrayList<String> getGrid() {
@@ -33,12 +48,15 @@ public class Map {
     }
 
    public boolean canMoveTo(int row, int col) {
-
-    // TODO: verifica se o boat se pode mexer para uma dada posiçao (nao pode ser wall nem rock e tem de estar nos limites do mapa)
-    return true;
-    
-}
+        if (row < 0 || row >= grid.size() || col < 0 || col >= grid.get(0).length()) {
+            return false;
+        }
+        char cell = grid.get(row).charAt(col);
+        return cell != 'X' && cell != 'R';
+    }
     public void moveBoat(int newRow, int newCol) {
-        //TODO: se poder mexer então mexe
+        if (canMoveTo(newRow, newCol)) {
+            boat.move(newRow, newCol);
+        }
     }
 }
