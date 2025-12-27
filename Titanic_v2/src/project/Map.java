@@ -1,7 +1,7 @@
 package project;
 
 import java.util.*;
-import java.io.*;
+import java.nio.file.*;
 
 public class Map {
 
@@ -14,18 +14,12 @@ public class Map {
     }
 
     private ArrayList<String> loadMap(String path) {
-        ArrayList<String> lines = new ArrayList<>();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            reader.close();
-        } catch (IOException e) {
+            return new ArrayList<>(Files.readAllLines(Paths.get(path)));
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ArrayList<>();
         }
-        return lines;
     }
 
    private void findBoatPosition() {
