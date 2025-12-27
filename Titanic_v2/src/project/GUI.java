@@ -36,13 +36,13 @@ public class GUI extends JFrame implements KeyListener {
     }
 
     private void loadIcons() {
-        boatImg = new ImageIcon("resources/icons/boat.png");
-        islandImg = new ImageIcon("resources/icons/island.png");
-        rockImg = new ImageIcon("resources/icons/iceberg.png");
-        mermaidImg = new ImageIcon("resources/icons/mermaid.png");
-        pirateImg = new ImageIcon("resources/icons/pirate.png");
-        vortexImg = new ImageIcon("resources/icons/vortex.png");
-        explosiveImg = new ImageIcon("resources/icons/explosive.png");
+        boatImg = new ImageIcon("bin/resources/icons/boat.png");
+        islandImg = new ImageIcon("bin/resources/icons/island.png");
+        rockImg = new ImageIcon("bin/resources/icons/iceberg.png");
+        mermaidImg = new ImageIcon("bin/resources/icons/mermaid.png");
+        pirateImg = new ImageIcon("bin/resources/icons/pirate.png");
+        vortexImg = new ImageIcon("bin/resources/icons/vortex.png");
+        explosiveImg = new ImageIcon("bin/resources/icons/explosive.png");
     }
 
     private void drawMap() {
