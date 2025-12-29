@@ -53,4 +53,13 @@ public class Map {
             boat.move(newRow, newCol);
         }
     }
+
+    public boolean touchedIsland() {
+        int row = boat.getRow();
+        int col = boat.getCol();
+        if (row >= 0 && row < grid.size() && col >= 0 && col < grid.get(row).length()) {
+            return grid.get(row).charAt(col) == 'I';
+        }
+        return false;
+    }
 }

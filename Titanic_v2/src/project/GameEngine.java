@@ -22,7 +22,10 @@ public class GameEngine {
     }
 
     public void nextLevel() {
-        //TODO: Muda o nivel
+        // Move to the next level
+        if (currentLevel + 1 < levelFiles.size()) {
+            loadLevel(currentLevel + 1);
+        }
     }
 
     public int getCurrentLevel() {
@@ -31,5 +34,13 @@ public class GameEngine {
 
     public Map getCurrentMap() {
         return currentMap;
+    }
+
+    public void loadNextLevel() {
+        nextLevel();
+    }
+
+    public void setCurrentGUI(GUI gui) {
+        this.currentGUI = gui;
     }
 }

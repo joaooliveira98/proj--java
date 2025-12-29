@@ -16,6 +16,7 @@ public class GUI extends JFrame implements KeyListener {
     public GUI(Map map, GameEngine engine) {
         this.map = map;
         this.engine = engine;
+        engine.setCurrentGUI(this);
 
         loadIcons();
 
@@ -27,7 +28,7 @@ public class GUI extends JFrame implements KeyListener {
 
         drawMap();
 
-        setTitle("Titanic - Nível " + (engine.getCurrentLevel() + 1));
+        updateTitle();
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(panel);
@@ -43,6 +44,10 @@ public class GUI extends JFrame implements KeyListener {
         pirateImg = new ImageIcon("bin/resources/icons/pirate.png");
         vortexImg = new ImageIcon("bin/resources/icons/vortex.png");
         explosiveImg = new ImageIcon("bin/resources/icons/explosive.png");
+    }
+
+    private void updateTitle() {
+        setTitle("Titanic - Level " + (engine.getCurrentLevel() + 1));
     }
 
     private void drawMap() {
@@ -124,6 +129,16 @@ public class GUI extends JFrame implements KeyListener {
                 break;
         }
         drawMap();
+        
+        // Verificar se tocou na ilha
+        if (map.touchedIsland()) {
+            engine.loadNextLevel();
+            map = engine.getCurrentMap();
+            if (map != null) {
+                updateTitle();
+                drawMap();
+            }
+        }
     }
 
     @Override public void keyReleased(KeyEvent e) {}
