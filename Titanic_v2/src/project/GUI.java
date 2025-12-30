@@ -10,6 +10,7 @@ public class GUI extends JFrame implements KeyListener {
     private Map map;
     private GameEngine engine;
     private JPanel panel;
+    private JLabel livesLabel;
 
     private ImageIcon boatImg, islandImg, rockImg, mermaidImg, pirateImg, vortexImg, explosiveImg;
 
@@ -22,9 +23,15 @@ public class GUI extends JFrame implements KeyListener {
 
         panel = new JPanel();
         panel.setLayout(new GridLayout(
-                map.getGrid().size(),
-                map.getGrid().get(0).length()
+            map.getGrid().size(),
+            map.getGrid().get(0).length()
         ));
+
+        
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        livesLabel = new JLabel("Vidas: " + engine.getLives());
+        topPanel.add(livesLabel);
+        add(topPanel, BorderLayout.NORTH);
 
         drawMap();
 
@@ -109,23 +116,43 @@ public class GUI extends JFrame implements KeyListener {
         panel.repaint();
     }
 
+    public void updateLives(int lives) {
+        if (livesLabel != null) {
+            livesLabel.setText("Vidas: " + lives);
+        }
+    }
+
+    public void alert(String message) {
+    JOptionPane.showMessageDialog(this, message);
+}
+
+    private void loseLife() {
+        engine.loseLife();
+        updateLives(engine.getLives());
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
+        
         Boat boat = map.getBoat();
         int row = boat.getRow();
         int col = boat.getCol();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
                 map.moveBoat(row, col - 1);
+                loseLife();
                 break;
             case KeyEvent.VK_RIGHT:
                 map.moveBoat(row, col + 1);
+                loseLife();
                 break;
             case KeyEvent.VK_UP:
                 map.moveBoat(row - 1, col);
+                loseLife();
                 break;
             case KeyEvent.VK_DOWN:
                 map.moveBoat(row + 1, col);
+                loseLife();
                 break;
         }
         drawMap();

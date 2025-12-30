@@ -8,6 +8,7 @@ public class GameEngine {
     private int currentLevel = 0;
     private Map currentMap;
     private GUI currentGUI;
+    private int vidas = 1000;
 
     public GameEngine(ArrayList<String> levelFiles) {
         this.levelFiles = levelFiles;
@@ -42,5 +43,24 @@ public class GameEngine {
 
     public void setCurrentGUI(GUI gui) {
         this.currentGUI = gui;
+        if (this.currentGUI != null) {
+            this.currentGUI.updateLives(vidas);
+        }
+    }
+
+    public int getLives() {
+        return vidas;
+    }
+
+    public void loseLife() {
+        vidas--;
+        if (currentGUI != null) {
+            currentGUI.updateLives(vidas);
+        }
+        if (vidas <= 0) {
+            currentGUI.alert("Game Over");
+            
+            System.exit(0);
+        }
     }
 }
