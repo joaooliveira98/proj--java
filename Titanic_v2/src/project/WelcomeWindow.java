@@ -55,7 +55,8 @@ public class WelcomeWindow extends JFrame {
 
         GameEngine engine = new GameEngine(levelFiles);
         Map map = engine.getCurrentMap();
-        new GUI(map, engine);
+        // Passa o nome do jogador para a GUI
+        new GUI(map, engine, playerName);
     }
 
     public String getPlayerName() {

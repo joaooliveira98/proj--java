@@ -11,12 +11,16 @@ public class GUI extends JFrame implements KeyListener {
     private GameEngine engine;
     private JPanel panel;
     private JLabel livesLabel;
+    // Nome do jogador para exibir no título da janela
+    private String playerName;
 
     private ImageIcon boatImg, islandImg, rockImg, mermaidImg, pirateImg, vortexImg, explosiveImg;
 
-    public GUI(Map map, GameEngine engine) {
+    // Construtor que aceita o nome do jogador
+    public GUI(Map map, GameEngine engine, String playerName) {
         this.map = map;
         this.engine = engine;
+        this.playerName = playerName;
         engine.setCurrentGUI(this);
 
         loadIcons();
@@ -53,8 +57,9 @@ public class GUI extends JFrame implements KeyListener {
         explosiveImg = new ImageIcon("bin/resources/icons/explosive.png");
     }
 
+    // Método para atualizar o título da janela com o nível e nome do jogador
     private void updateTitle() {
-        setTitle("Titanic - Level " + (engine.getCurrentLevel() + 1));
+        setTitle("Titanic - Level " + (engine.getCurrentLevel() + 1) + " - " + playerName);
     }
 
     private void drawMap() {

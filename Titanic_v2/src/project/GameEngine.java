@@ -18,14 +18,21 @@ public class GameEngine {
     public void loadLevel(int levelIndex) {
         if (levelIndex < levelFiles.size()) {
             currentLevel = levelIndex;
-            currentMap = new Map(levelFiles.get(levelIndex));
+            currentMap = new Map(levelFiles.get(levelIndex), this);
         }
     }
 
+    // Método para avançar para o próximo nível, ou mostrar mensagem de fim se for o último
     public void nextLevel() {
         // Move to the next level
         if (currentLevel + 1 < levelFiles.size()) {
             loadLevel(currentLevel + 1);
+        } else {
+            // Last level completed
+            if (currentGUI != null) {
+                currentGUI.alert("Fim do Jogo!");
+            }
+            System.exit(0);
         }
     }
 
@@ -53,7 +60,12 @@ public class GameEngine {
     }
 
     public void loseLife() {
-        vidas--;
+        loseLife(1);
+    }
+
+    // Método para perder vidas, sobrecarregado para permitir perda de quantidade específica (usado para explosivos)
+    public void loseLife(int amount) {
+        vidas -= amount;
         if (currentGUI != null) {
             currentGUI.updateLives(vidas);
         }
@@ -62,5 +74,21 @@ public class GameEngine {
             
             System.exit(0);
         }
+    }
+
+    // Método para ganhar vidas, usado quando o barco toca na sereia
+    public void gainLife(int amount) {
+        vidas += amount;
+        if (currentGUI != null) {
+            currentGUI.updateLives(vidas);
+        }
+    }
+
+    // Método para terminar o jogo quando o barco toca no pirata
+    public void gameOver() {
+        if (currentGUI != null) {
+            currentGUI.alert("Game Over");
+        }
+        System.exit(0);
     }
 }
