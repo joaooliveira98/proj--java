@@ -7,11 +7,8 @@ public class Map {
 
     private ArrayList<String> grid;
     private Boat boat;
-    // Lista de Vortexes no mapa para teletransporte
     private ArrayList<Vortex> vortexes;
-    // Lista de Sereias no mapa para bónus de vidas
     private ArrayList<Mermaid> mermaids;
-    // O Pirata no mapa, que gera explosivos
     private Pirate pirate;
     private GameEngine engine;
 
@@ -116,7 +113,7 @@ public class Map {
             if (current == 'P') {
                 engine.gameOver();
             } else if (current == 'E') {
-                engine.loseLife(10);
+                engine.loseLife(5);
                 removeExplosive(boat.getRow(), boat.getCol());
             }
         }
@@ -139,17 +136,6 @@ public class Map {
         grid.set(row, sb.toString());
     }
 
-    // Método para obter uma posição vazia aleatória no mapa
-    private int[] getRandomEmptyPosition() {
-        Random rand = new Random();
-        int row, col;
-        do {
-            row = rand.nextInt(grid.size());
-            col = rand.nextInt(grid.get(0).length());
-        } while (grid.get(row).charAt(col) != '.');
-        return new int[]{row, col};
-    }
-
     // Método para obter uma posição vazia aleatória, excluindo as 4 direções adjacentes ao barco
     private int[] getRandomEmptyPositionExcludingAdjacent() {
         Random rand = new Random();
@@ -163,23 +149,6 @@ public class Map {
                  ((Math.abs(row - boatRow) == 1 && col == boatCol) ||
                   (Math.abs(col - boatCol) == 1 && row == boatRow)));
         return new int[]{row, col};
-    }
-
-    // Método para mover o pirata para uma posição aleatória (não usado atualmente)
-    private void movePirate() {
-        // Remove old pirate position
-        int oldRow = pirate.getRow();
-        int oldCol = pirate.getCol();
-        StringBuilder sb = new StringBuilder(grid.get(oldRow));
-        sb.setCharAt(oldCol, '.');
-        grid.set(oldRow, sb.toString());
-        // Get new position
-        int[] newPos = getRandomEmptyPosition();
-        pirate = new Pirate(newPos[0], newPos[1]);
-        // Place new 'P'
-        sb = new StringBuilder(grid.get(newPos[0]));
-        sb.setCharAt(newPos[1], 'P');
-        grid.set(newPos[0], sb.toString());
     }
 
     // Método para gerar um explosivo em uma posição aleatória segura

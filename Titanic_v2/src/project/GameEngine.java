@@ -8,7 +8,7 @@ public class GameEngine {
     private int currentLevel = 0;
     private Map currentMap;
     private GUI currentGUI;
-    private int vidas = 1000;
+    private int vidas = 60; // Vida inicial do jogador
 
     public GameEngine(ArrayList<String> levelFiles) {
         this.levelFiles = levelFiles;
