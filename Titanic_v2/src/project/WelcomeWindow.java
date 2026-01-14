@@ -31,7 +31,7 @@ public class WelcomeWindow extends JFrame {
                     dispose(); // Close the welcome window
                     startGame();
                 } else {
-                    JOptionPane.showMessageDialog(WelcomeWindow.this, "Por favor, insira um nome válido.");
+                    JOptionPane.showMessageDialog(WelcomeWindow.this, "Por favor, insira um nome valido.");
                 }
             }
         });
