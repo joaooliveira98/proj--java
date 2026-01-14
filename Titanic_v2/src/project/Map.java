@@ -1,49 +1,93 @@
 package project;
 
-import java.util.*;
-import java.nio.file.*;
+// Importações necessárias
+import java.util.*;          // Para ArrayList e outras estruturas
+import java.nio.file.*;      // Para ler ficheiros
 
+/**
+ * Classe Map - Representa o mapa/nível do jogo
+ * Responsável por:
+ * - Carregar o mapa a partir de um ficheiro de texto
+ * - Gerir todos os elementos do mapa (barco, rochedos, sereias, piratas, vórtices, explosivos)
+ * - Controlar movimentos e interações do barco com elementos
+ * - Gerir mecânicas especiais (teletransporte, ganhar/perder vidas, game over)
+ */
 public class Map {
 
+    // Grelha do mapa (cada String representa uma linha)
     private ArrayList<String> grid;
+    
+    // Barco controlado pelo jogador
     private Boat boat;
+    
+    // Lista de vórtices (portais) no mapa
     private ArrayList<Vortex> vortexes;
+    
+    // Lista de sereias no mapa
     private ArrayList<Mermaid> mermaids;
+    
+    // Pirata no mapa (apenas um por nível)
     private Pirate pirate;
+    
+    // Referência ao motor do jogo
     private GameEngine engine;
 
-    // Construtor que carrega o mapa e inicializa os elementos especiais
+    /**
+     * Construtor do Map
+     * Carrega o mapa e inicializa todos os elementos especiais
+     * @param filePath Caminho do ficheiro de texto com o mapa
+     * @param engine Motor do jogo para controlar mecânicas
+     */
     public Map(String filePath, GameEngine engine) {
         this.engine = engine;
+        // Carrega a grelha do mapa do ficheiro
         grid = loadMap(filePath);
+        // Inicializa as listas de elementos especiais
         vortexes = new ArrayList<>();
         mermaids = new ArrayList<>();
+        // Procura e inicializa todos os elementos no mapa
         findBoatPosition();
         findVortexes();
         findMermaids();
         findPirate();
     }
 
+    /**
+     * Carrega o mapa a partir de um ficheiro de texto
+     * @param path Caminho do ficheiro
+     * @return Lista de Strings, cada uma representando uma linha do mapa
+     */
     private ArrayList<String> loadMap(String path) {
         try {
+            // Lê todas as linhas do ficheiro
             return new ArrayList<>(Files.readAllLines(Paths.get(path)));
         } catch (Exception e) {
+            // Se houver erro, imprime e retorna lista vazia
             e.printStackTrace();
             return new ArrayList<>();
         }
     }
 
-   private void findBoatPosition() {
+    /**
+     * Procura a posição inicial do barco no mapa (símbolo 'B')
+     */
+    private void findBoatPosition() {
+        // Percorre todas as células do mapa
         for (int r = 0; r < grid.size(); r++) {
             for (int c = 0; c < grid.get(r).length(); c++) {
+                // Se encontrar 'B', cria o barco nessa posição
                 if (grid.get(r).charAt(c) == 'B') {
                     boat = new Boat(r, c);
-                    return;
+                    return; // Sai do método após encontrar
                 }
             }
         }
     }
 
+    /**
+     * Procura todos os vórtices no mapa (símbolo 'V')
+     * e adiciona-os à lista
+     */
     private void findVortexes() {
         for (int r = 0; r < grid.size(); r++) {
             for (int c = 0; c < grid.get(r).length(); c++) {
@@ -54,7 +98,10 @@ public class Map {
         }
     }
 
-    // Método para encontrar todas as sereias no mapa
+    /**
+     * Procura todas as sereias no mapa (símbolo 'M')
+     * e adiciona-as à lista
+     */
     private void findMermaids() {
         for (int r = 0; r < grid.size(); r++) {
             for (int c = 0; c < grid.get(r).length(); c++) {
@@ -65,110 +112,178 @@ public class Map {
         }
     }
 
-    // Método para encontrar o pirata no mapa
+    /**
+     * Procura o pirata no mapa (símbolo 'P')
+     */
     private void findPirate() {
         for (int r = 0; r < grid.size(); r++) {
             for (int c = 0; c < grid.get(r).length(); c++) {
                 if (grid.get(r).charAt(c) == 'P') {
                     pirate = new Pirate(r, c);
-                    return;
+                    return; // Sai após encontrar (só há um pirata)
                 }
             }
         }
     }
 
+    /**
+     * Obtém a grelha do mapa
+     * @return Lista com as linhas do mapa
+     */
     public ArrayList<String> getGrid() {
         return grid;
     }
 
+    /**
+     * Obtém o barco
+     * @return Objeto Boat
+     */
     public Boat getBoat() {
         return boat;
     }
 
-   public boolean canMoveTo(int row, int col) {
+    /**
+     * Verifica se o barco pode mover-se para uma determinada posição
+     * @param row Linha de destino
+     * @param col Coluna de destino
+     * @return true se pode mover, false caso contrário
+     */
+    public boolean canMoveTo(int row, int col) {
+        // Verifica se está dentro dos limites do mapa
         if (row < 0 || row >= grid.size() || col < 0 || col >= grid.get(0).length()) {
             return false;
         }
+        // Obtém o símbolo da célula de destino
         char cell = grid.get(row).charAt(col);
+        // Não pode mover para 'X' (fora do mapa) nem 'R' (rochedo)
         return cell != 'X' && cell != 'R';
     }
+
+    /**
+     * Move o barco para uma nova posição e verifica interações
+     * @param newRow Nova linha
+     * @param newCol Nova coluna
+     */
     public void moveBoat(int newRow, int newCol) {
+        // Verifica se o movimento é válido
         if (canMoveTo(newRow, newCol)) {
+            // Move o barco
             boat.move(newRow, newCol);
-            // Verificar se moveu para um vortex e teletransportar
+            
+            // Verifica se moveu para um vórtice e teletransporta
             if (grid.get(newRow).charAt(newCol) == 'V') {
                 teleportBoat();
             }
-            // Verificar se moveu para uma sereia e ganhar vidas
+            
+            // Verifica se moveu para uma sereia e ganha vidas
             if (grid.get(boat.getRow()).charAt(boat.getCol()) == 'M') {
-                engine.gainLife(10);
+                engine.gainLife(10); // Ganha 10 vidas
                 removeMermaid(boat.getRow(), boat.getCol());
             }
-            // Se o pirata estiver presente, gerar explosivo
+            
+            // Se o pirata existe, gera um explosivo aleatório
             if (pirate != null) {
                 spawnExplosive();
             }
-            // Verificar colisões após movimentos
+            
+            // Verifica colisões após o movimento
             char current = grid.get(boat.getRow()).charAt(boat.getCol());
+            
+            // Se tocou no pirata, Game Over
             if (current == 'P') {
                 engine.gameOver();
-            } else if (current == 'E') {
+            } 
+            // Se tocou num explosivo, perde 5 vidas
+            else if (current == 'E') {
                 engine.loseLife(5);
                 removeExplosive(boat.getRow(), boat.getCol());
             }
         }
     }
 
-    // Método para teletransportar o barco para o outro vortex
+    /**
+     * Teletransporta o barco para o outro vórtice
+     * Quando o barco entra num vórtice, é movido para o outro vórtice do mapa
+     */
     private void teleportBoat() {
+        // Procura o vórtice diferente do atual
         for (Vortex v : vortexes) {
+            // Se não for o vórtice onde o barco está
             if (v.getRow() != boat.getRow() || v.getCol() != boat.getCol()) {
+                // Move o barco para esse vórtice
                 boat.move(v.getRow(), v.getCol());
-                break;
+                break; // Sai do ciclo
             }
         }
     }
 
-    // Método para remover a sereia do mapa após ser tocada
+    /**
+     * Remove a sereia do mapa após ser tocada
+     * @param row Linha da sereia
+     * @param col Coluna da sereia
+     */
     private void removeMermaid(int row, int col) {
+        // Substitui 'M' por '.' (água vazia)
         StringBuilder sb = new StringBuilder(grid.get(row));
         sb.setCharAt(col, '.');
         grid.set(row, sb.toString());
     }
 
-    // Método para obter uma posição vazia aleatória, excluindo as 4 direções adjacentes ao barco
+    /**
+     * Obtém uma posição vazia aleatória no mapa,
+     * excluindo as 4 posições adjacentes ao barco (para não gerar explosivo ao lado)
+     * @return Array com [linha, coluna] da posição escolhida
+     */
     private int[] getRandomEmptyPositionExcludingAdjacent() {
         Random rand = new Random();
         int row, col;
         int boatRow = boat.getRow();
         int boatCol = boat.getCol();
+        
+        // Continua a tentar até encontrar uma posição válida
         do {
             row = rand.nextInt(grid.size());
             col = rand.nextInt(grid.get(0).length());
-        } while (grid.get(row).charAt(col) != '.' ||
-                 ((Math.abs(row - boatRow) == 1 && col == boatCol) ||
-                  (Math.abs(col - boatCol) == 1 && row == boatRow)));
+        } while (grid.get(row).charAt(col) != '.' ||  // Não pode ser célula ocupada
+                 ((Math.abs(row - boatRow) == 1 && col == boatCol) ||  // Não pode ser acima/abaixo
+                  (Math.abs(col - boatCol) == 1 && row == boatRow)));   // Não pode ser esquerda/direita
+        
         return new int[]{row, col};
     }
 
-    // Método para gerar um explosivo em uma posição aleatória segura
+    /**
+     * Gera um explosivo numa posição aleatória segura
+     * Chamado a cada movimento do barco quando há pirata no nível
+     */
     private void spawnExplosive() {
+        // Obtém posição aleatória válida
         int[] pos = getRandomEmptyPositionExcludingAdjacent();
+        // Coloca 'E' (explosivo) nessa posição
         StringBuilder sb = new StringBuilder(grid.get(pos[0]));
         sb.setCharAt(pos[1], 'E');
         grid.set(pos[0], sb.toString());
     }
 
-    // Método para remover o explosivo do mapa após ser tocado
+    /**
+     * Remove o explosivo do mapa após ser tocado
+     * @param row Linha do explosivo
+     * @param col Coluna do explosivo
+     */
     private void removeExplosive(int row, int col) {
+        // Substitui 'E' por '.' (água vazia)
         StringBuilder sb = new StringBuilder(grid.get(row));
         sb.setCharAt(col, '.');
         grid.set(row, sb.toString());
     }
 
+    /**
+     * Verifica se o barco tocou na ilha (objetivo do nível)
+     * @return true se tocou na ilha, false caso contrário
+     */
     public boolean touchedIsland() {
         int row = boat.getRow();
         int col = boat.getCol();
+        // Verifica se está dentro dos limites e se a célula é 'I' (ilha)
         if (row >= 0 && row < grid.size() && col >= 0 && col < grid.get(row).length()) {
             return grid.get(row).charAt(col) == 'I';
         }
