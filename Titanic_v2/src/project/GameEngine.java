@@ -156,10 +156,26 @@ public class GameEngine {
         
         // Verifica se o jogador ficou sem vidas
         if (vidas <= 0) {
-            // Mostra mensagem de Game Over
-            currentGUI.alert("Game Over");
-            // Termina o jogo
-            System.exit(0);
+            // Guarda a pontuação no ficheiro primeiro
+            salvarPontuacao();
+            
+            if (currentGUI != null) {           
+                // Cria um diálogo personalizado com botão "Ver Pontuações"
+                Object[] options = {"Ver Pontuacoes"};
+                JOptionPane.showOptionDialog(currentGUI,
+                    "Game Over!",
+                    "Fim do Jogo",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.ERROR_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+                // Fecha a GUI após o utilizador clicar no botão
+                currentGUI.dispose();
+            }
+            
+            // Abre a tabela de pontuações
+            SwingUtilities.invokeLater(() -> new pontuacao(this));
         }
     }
 
@@ -175,6 +191,19 @@ public class GameEngine {
         if (currentGUI != null) {
             currentGUI.updateLives(vidas);
         }
+    }
+
+    /**
+     * Quando o barco toca no pirata: perde 10 vidas e Game Over imediato
+     */
+    public void pirateHit() {
+        // Desconta 10 vidas
+        vidas -= 10;
+        if (currentGUI != null) {
+            currentGUI.updateLives(vidas);
+        }
+        // Game Over imediato
+        gameOver();
     }
 
     /**
