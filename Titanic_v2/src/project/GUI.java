@@ -144,20 +144,28 @@ public class GUI extends JFrame implements KeyListener {
         int col = boat.getCol();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
-                map.moveBoat(row, col - 1);
-                loseLife();
+                if (map.canMoveTo(row, col - 1)) {
+                    map.moveBoat(row, col - 1);
+                    loseLife();
+                }
                 break;
             case KeyEvent.VK_RIGHT:
-                map.moveBoat(row, col + 1);
-                loseLife();
+                if (map.canMoveTo(row, col + 1)) {
+                    map.moveBoat(row, col + 1);
+                    loseLife();
+                }
                 break;
             case KeyEvent.VK_UP:
-                map.moveBoat(row - 1, col);
-                loseLife();
+                if (map.canMoveTo(row - 1, col)) {
+                    map.moveBoat(row - 1, col);
+                    loseLife();
+                }
                 break;
             case KeyEvent.VK_DOWN:
-                map.moveBoat(row + 1, col);
-                loseLife();
+                if (map.canMoveTo(row + 1, col)) {
+                    map.moveBoat(row + 1, col);
+                    loseLife();
+                }
                 break;
         }
         drawMap();

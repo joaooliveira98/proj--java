@@ -35,10 +35,20 @@ public class WelcomeWindow extends JFrame {
                 }
             }
         });
+        JButton scoreButton = new JButton("Ver Pontuacoes");
+        scoreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Fecha a tela inicial
+                GameEngine engine = new GameEngine(new ArrayList<>(), "anonimo"); // Cria uma instância do GameEngine
+                new pontuacao(engine); // Abre a tabela
+            }
+        });
 
         panel.add(label);
         panel.add(nameField);
         panel.add(startButton);
+        panel.add(scoreButton);
 
         add(panel);
         setVisible(true);
@@ -53,7 +63,7 @@ public class WelcomeWindow extends JFrame {
         levelFiles.add("src/resources/levels/level4.txt");
         levelFiles.add("src/resources/levels/level5.txt");
 
-        GameEngine engine = new GameEngine(levelFiles);
+        GameEngine engine = new GameEngine(levelFiles, playerName);
         Map map = engine.getCurrentMap();
         // Passa o nome do jogador para a GUI
         new GUI(map, engine, playerName);
