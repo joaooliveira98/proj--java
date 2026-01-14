@@ -180,7 +180,7 @@ public class GameEngine {
     }
 
     /**
-     * Quando o barco toca no pirata: perde 60 vidas e Game Over imediato
+     * Quando o barco toca no pirata: Game Over
      */
     public void pirateHit() {
         if (gameOverTriggered) {
