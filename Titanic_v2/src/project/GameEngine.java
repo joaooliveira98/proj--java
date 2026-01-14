@@ -156,8 +156,10 @@ public class GameEngine {
         
         // Verifica se o jogador ficou sem vidas
         if (vidas <= 0) {
-            // Chama gameOver() para mostrar a mensagem e abrir a tabela de pontuações
-            gameOver();
+            // Mostra mensagem de Game Over
+            currentGUI.alert("Game Over");
+            // Termina o jogo
+            System.exit(0);
         }
     }
 
