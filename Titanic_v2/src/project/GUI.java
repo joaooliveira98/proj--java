@@ -1,10 +1,8 @@
 package project;
-
-// Importações necessárias para criar a interface gráfica
-import java.awt.*;              // Layouts e componentes gráficos
-import java.awt.event.*;        // Eventos de teclado e ações
-import java.util.ArrayList;     // Para manipular listas
-import javax.swing.*;           // Componentes Swing (JFrame, JPanel, JLabel, etc.)
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import javax.swing.*;
 
 /**
  * Classe GUI - Interface Gráfica do Utilizador
@@ -17,7 +15,7 @@ import javax.swing.*;           // Componentes Swing (JFrame, JPanel, JLabel, et
  */
 public class GUI extends JFrame implements KeyListener {
 
-    // Mapa atual sendo exibido
+    // Mapa atual
     private Map map;
     
     // Motor do jogo para controlar a lógica
@@ -135,11 +133,11 @@ public class GUI extends JFrame implements KeyListener {
                     char elem = grid.get(r).charAt(c);
 
                     switch (elem) {
-                        case 'R': // Rochedo (iceberg)
+                        case 'R': // Rocha
                             cell.add(new JLabel(rockImg));
                             cell.setBackground(new Color(0, 102, 204));
                             break;
-                        case 'I': // Ilha (objetivo)
+                        case 'I': // Ilha
                             cell.add(new JLabel(islandImg));
                             cell.setBackground(new Color(0, 102, 204));
                             break;
@@ -151,7 +149,7 @@ public class GUI extends JFrame implements KeyListener {
                              cell.add(new JLabel(mermaidImg)); 
                              cell.setBackground(new Color(0, 102, 204));
                              break;
-                        case 'V': // Vórtice (portal)
+                        case 'V': // Vórtice
                             cell.add(new JLabel(vortexImg));
                             cell.setBackground(new Color(0, 102, 204));
                             break;
@@ -159,7 +157,7 @@ public class GUI extends JFrame implements KeyListener {
                             cell.add(new JLabel(explosiveImg));
                             cell.setBackground(new Color(0, 102, 204));
                             break;
-                        case '.': // Agua vazia
+                        case '.': // Agua
                             cell.setBackground(new Color(0, 102, 204)); 
                             break;
                         case 'X': // Fora do mapa
@@ -249,7 +247,7 @@ public class GUI extends JFrame implements KeyListener {
         // Redesenha o mapa após o movimento
         drawMap();
         
-        // Verifica se tocou na ilha (objetivo)
+        // Verifica se tocou na ilha
         if (map.touchedIsland()) {
             // Carrega o próximo nível
             engine.loadNextLevel();
@@ -262,7 +260,7 @@ public class GUI extends JFrame implements KeyListener {
         }
     }
 
-    // Métodos da interface KeyListener (não utilizados, mas obrigatórios)
+    // Métodos da interface KeyListener
     @Override public void keyReleased(KeyEvent e) {}
     @Override public void keyTyped(KeyEvent e) {}
 }

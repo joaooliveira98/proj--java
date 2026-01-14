@@ -2,7 +2,6 @@ package project;
 
 /**
  * Classe Pirate - Representa o pirata no mapa
- * O pirata é um inimigo perigoso que:
  * - Causa Game Over se o barco tocar nele
  * - Gera explosivos aleatoriamente no mapa a cada movimento do barco
  */

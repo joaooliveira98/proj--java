@@ -1,11 +1,9 @@
 package project;
-
-// Importações necessárias
-import javax.swing.SwingUtilities;  // Para executar código na thread da interface gráfica
-import java.io.FileWriter;          // Para escrever em ficheiros
-import java.io.IOException;         // Para tratar exceções de entrada/saída
-import java.io.PrintWriter;         // Para escrever texto formatado em ficheiros
-import java.util.*;                 // Para usar ArrayList e outras estruturas de dados
+import javax.swing.SwingUtilities;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * Classe GameEngine - Motor do jogo que controla toda a lógica do Titanic
@@ -30,7 +28,7 @@ public class GameEngine {
     // Referência à interface gráfica atual
     private GUI currentGUI;
     
-    // Vidas do jogador (começam em 60)
+    // Vidas do jogador
     private int vidas = 60;
     
     // Nome do jogador
@@ -92,17 +90,6 @@ public class GameEngine {
     }
 
     /**
-     * Método para mostrar o ecrã de boas-vindas
-     * (Não está a ser utilizado atualmente)
-     */
-    private void showWelcomeScreen() {
-        SwingUtilities.invokeLater(() -> {
-            WelcomeWindow menu = new WelcomeWindow();
-            menu.setVisible(true);
-        });
-    }
-
-    /**
      * Obtém o índice do nível atual
      * @return Indice do nível atual (0 = primeiro nível)
      */
@@ -146,7 +133,7 @@ public class GameEngine {
     }
 
     /**
-     * Remove uma vida do jogador (atalho para loseLife(1))
+     * Remove uma vida do jogador
      */
     public void loseLife() {
         loseLife(1);

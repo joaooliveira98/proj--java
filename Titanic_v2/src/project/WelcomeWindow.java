@@ -1,11 +1,9 @@
 package project;
-
-// Importações necessárias para criar a interface gráfica
-import javax.swing.*;  // Componentes da interface gráfica (JFrame, JButton, JTextField, etc.)
-import java.awt.*;     // Layouts e funcionalidades gráficas
-import java.awt.event.ActionEvent;      // Eventos de ação (cliques em botões)
-import java.awt.event.ActionListener;   // Interface para escutar eventos de ação
-import java.util.ArrayList;             // Lista para armazenar os caminhos dos ficheiros de níveis
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * Classe WelcomeWindow - Janela de boas-vindas do jogo Titanic
@@ -124,7 +122,7 @@ public class WelcomeWindow extends JFrame {
         // Cria uma instância do GameEngine com os níveis e o nome do jogador
         GameEngine engine = new GameEngine(levelFiles, playerName);
         
-        // Obtém o mapa atual (primeiro nível) do motor do jogo
+        // Obtém o mapa atual do motor do jogo
         Map map = engine.getCurrentMap();
         
         // Cria e mostra a interface gráfica do jogo (GUI)

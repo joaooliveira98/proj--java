@@ -1,14 +1,12 @@
 package project;
-
-// Importações necessárias
-import java.util.*;          // Para ArrayList e outras estruturas
-import java.nio.file.*;      // Para ler ficheiros
+import java.util.*;
+import java.nio.file.*;
 
 /**
  * Classe Map - Representa o mapa/nível do jogo
  * Responsável por:
  * - Carregar o mapa a partir de um ficheiro de texto
- * - Gerir todos os elementos do mapa (barco, rochedos, sereias, piratas, vórtices, explosivos)
+ * - Gerir todos os elementos do mapa
  * - Controlar movimentos e interações do barco com elementos
  * - Gerir mecânicas especiais (teletransporte, ganhar/perder vidas, game over)
  */
@@ -20,13 +18,13 @@ public class Map {
     // Barco controlado pelo jogador
     private Boat boat;
     
-    // Lista de vórtices (portais) no mapa
+    // Lista de portais no mapa
     private ArrayList<Vortex> vortexes;
     
     // Lista de sereias no mapa
     private ArrayList<Mermaid> mermaids;
     
-    // Pirata no mapa (apenas um por nível)
+    // Pirata no mapa
     private Pirate pirate;
     
     // Referência ao motor do jogo
@@ -69,16 +67,15 @@ public class Map {
     }
 
     /**
-     * Procura a posição inicial do barco no mapa (símbolo 'B')
+     * Procura a posição inicial do barco no mapa
      */
     private void findBoatPosition() {
-        // Percorre todas as células do mapa
         for (int r = 0; r < grid.size(); r++) {
             for (int c = 0; c < grid.get(r).length(); c++) {
                 // Se encontrar 'B', cria o barco nessa posição
                 if (grid.get(r).charAt(c) == 'B') {
                     boat = new Boat(r, c);
-                    return; // Sai do método após encontrar
+                    return;
                 }
             }
         }
@@ -120,7 +117,7 @@ public class Map {
             for (int c = 0; c < grid.get(r).length(); c++) {
                 if (grid.get(r).charAt(c) == 'P') {
                     pirate = new Pirate(r, c);
-                    return; // Sai após encontrar (só há um pirata)
+                    return;
                 }
             }
         }
@@ -155,7 +152,7 @@ public class Map {
         }
         // Obtém o símbolo da célula de destino
         char cell = grid.get(row).charAt(col);
-        // Não pode mover para 'X' (fora do mapa) nem 'R' (rochedo)
+        // Não pode mover para 'X' (fora do mapa) nem 'R' (rocha)
         return cell != 'X' && cell != 'R';
     }
 
@@ -192,6 +189,7 @@ public class Map {
             // Se tocou no pirata, Game Over
             if (current == 'P') {
                 engine.gameOver();
+                engine.loseLife(10);
             } 
             // Se tocou num explosivo, perde 5 vidas
             else if (current == 'E') {
@@ -223,7 +221,7 @@ public class Map {
      * @param col Coluna da sereia
      */
     private void removeMermaid(int row, int col) {
-        // Substitui 'M' por '.' (água vazia)
+        // Substitui 'M' por '.' (água)
         StringBuilder sb = new StringBuilder(grid.get(row));
         sb.setCharAt(col, '.');
         grid.set(row, sb.toString());

@@ -1,13 +1,11 @@
 package project;
-
-// Importações necessárias para criar a tabela de pontuações
-import javax.swing.*;                      // Componentes da interface gráfica
-import javax.swing.table.DefaultTableModel; // Modelo de dados para a tabela
-import java.awt.*;                          // Layouts e componentes gráficos
-import java.awt.event.ActionEvent;          // Eventos de ação
-import java.awt.event.ActionListener;       // Listener de eventos
-import java.io.File;                        // Para trabalhar com ficheiros
-import java.util.*;                         // Para usar estruturas de dados (Map, ArrayList)
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.*;
 
 /**
  * Classe pontuacao - Janela que exibe a tabela de pontuações (ranking)
