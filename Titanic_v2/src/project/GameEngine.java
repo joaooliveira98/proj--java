@@ -1,6 +1,4 @@
 package project;
-
-import javax.swing.SwingUtilities;
 import javax.swing.JOptionPane;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,6 +33,9 @@ public class GameEngine {
     
     // Nome do jogador
     private String playerName;
+
+    // Flag para evitar múltiplos Game Over (duplicados)
+    private boolean gameOverTriggered = false;
 
     /**
      * Construtor do GameEngine
@@ -146,6 +147,9 @@ public class GameEngine {
      * @param amount Quantidade de vidas a perder
      */
     public void loseLife(int amount) {
+        if (gameOverTriggered) {
+            return; // Já terminou o jogo
+        }
         // Subtrai as vidas
         vidas -= amount;
         
@@ -156,26 +160,8 @@ public class GameEngine {
         
         // Verifica se o jogador ficou sem vidas
         if (vidas <= 0) {
-            // Guarda a pontuação no ficheiro primeiro
-            salvarPontuacao();
-            
-            if (currentGUI != null) {           
-                // Cria um diálogo personalizado com botão "Ver Pontuações"
-                Object[] options = {"Ver Pontuacoes"};
-                JOptionPane.showOptionDialog(currentGUI,
-                    "Game Over!",
-                    "Fim do Jogo",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.ERROR_MESSAGE,
-                    null,
-                    options,
-                    options[0]);
-                // Fecha a GUI após o utilizador clicar no botão
-                currentGUI.dispose();
-            }
-            
-            // Abre a tabela de pontuações
-            SwingUtilities.invokeLater(() -> new pontuacao(this));
+            // Centraliza a lógica num só local
+            gameOver();
         }
     }
 
@@ -194,15 +180,17 @@ public class GameEngine {
     }
 
     /**
-     * Quando o barco toca no pirata: perde 10 vidas e Game Over imediato
+     * Quando o barco toca no pirata: perde 60 vidas e Game Over imediato
      */
     public void pirateHit() {
-        // Desconta 10 vidas
-        vidas -= 10;
+        if (gameOverTriggered) {
+            return;
+        }
+        // Desconta 60 vidas (penalização), e termina o jogo automaticamente
+        vidas -= 60;
         if (currentGUI != null) {
             currentGUI.updateLives(vidas);
         }
-        // Game Over imediato
         gameOver();
     }
 
@@ -211,6 +199,10 @@ public class GameEngine {
      * Mostra mensagem de Game Over com botão personalizado, guarda a pontuação e abre a tabela
      */
     public void gameOver() {
+        if (gameOverTriggered) {
+            return; // Evita popups duplicados
+        }
+        gameOverTriggered = true;
         // Guarda a pontuação no ficheiro primeiro
         salvarPontuacao();
         
