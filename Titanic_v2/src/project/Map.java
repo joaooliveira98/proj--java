@@ -186,10 +186,10 @@ public class Map {
             // Verifica colisões após o movimento
             char current = grid.get(boat.getRow()).charAt(boat.getCol());
             
-            // Se tocou no pirata, Game Over
+            // Se tocou no pirata, perde 10 vidas e Game Over
             if (current == 'P') {
-                engine.gameOver();
-                engine.loseLife(10);
+                engine.loseLife(10);  // Perde 10 vidas
+                engine.gameOver();    // Game Over imediato
             } 
             // Se tocou num explosivo, perde 5 vidas
             else if (current == 'E') {

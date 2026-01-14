@@ -71,6 +71,9 @@ public class GUI extends JFrame implements KeyListener {
         // Define o tamanho da janela
         setSize(600, 600);
         
+        // Centraliza a janela no ecrã
+        setLocationRelativeTo(null);
+        
         // Define que a aplicação fecha ao fechar a janela
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         

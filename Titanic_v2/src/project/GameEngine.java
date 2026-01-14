@@ -1,9 +1,11 @@
 package project;
-import javax.swing.SwingUtilities;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.*;
+
+import javax.swing.SwingUtilities;  // Para executar código na thread da interface gráfica
+import javax.swing.JOptionPane;     // Para mostrar diálogos personalizados
+import java.io.FileWriter;          // Para escrever em ficheiros
+import java.io.IOException;         // Para tratar exceções de entrada/saída
+import java.io.PrintWriter;         // Para escrever texto formatado em ficheiros
+import java.util.*;                 // Para usar ArrayList e outras estruturas de dados
 
 /**
  * Classe GameEngine - Motor do jogo que controla toda a lógica do Titanic
@@ -154,10 +156,8 @@ public class GameEngine {
         
         // Verifica se o jogador ficou sem vidas
         if (vidas <= 0) {
-            // Mostra mensagem de Game Over
-            currentGUI.alert("Game Over");
-            // Termina o jogo
-            System.exit(0);
+            // Chama gameOver() para mostrar a mensagem e abrir a tabela de pontuações
+            gameOver();
         }
     }
 
@@ -177,13 +177,29 @@ public class GameEngine {
 
     /**
      * Termina o jogo imediatamente (usado quando o barco toca no pirata)
+     * Mostra mensagem de Game Over com botão personalizado, guarda a pontuação e abre a tabela
      */
     public void gameOver() {
-        if (currentGUI != null) {
-            currentGUI.alert("Game Over");
+        // Guarda a pontuação no ficheiro primeiro
+        salvarPontuacao();
+        
+        if (currentGUI != null) {           
+            // Cria um diálogo personalizado com botão "Ver Pontuações"
+            // Passa currentGUI em vez de null para aparecer no meio da janela do jogo
+            Object[] options = {"Ver Pontuacoes"};
+            JOptionPane.showOptionDialog(currentGUI,
+                "Game Over!",
+                "Fim do Jogo",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.ERROR_MESSAGE,
+                null,
+                options,
+                options[0]);
+            currentGUI.dispose();
         }
-        // Termina a aplicação
-        System.exit(0);
+        
+        // Abre a tabela de pontuações
+        new pontuacao(this);
     }
 
     /**
