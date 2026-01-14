@@ -1,11 +1,11 @@
 package project;
 
-import javax.swing.SwingUtilities;  // Para executar código na thread da interface gráfica
-import javax.swing.JOptionPane;     // Para mostrar diálogos personalizados
-import java.io.FileWriter;          // Para escrever em ficheiros
-import java.io.IOException;         // Para tratar exceções de entrada/saída
-import java.io.PrintWriter;         // Para escrever texto formatado em ficheiros
-import java.util.*;                 // Para usar ArrayList e outras estruturas de dados
+import javax.swing.SwingUtilities;
+import javax.swing.JOptionPane;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * Classe GameEngine - Motor do jogo que controla toda a lógica do Titanic
