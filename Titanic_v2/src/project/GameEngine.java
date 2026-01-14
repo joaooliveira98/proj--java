@@ -186,8 +186,8 @@ public class GameEngine {
         if (gameOverTriggered) {
             return;
         }
-        // Desconta 60 vidas (penalização), e termina o jogo automaticamente
-        vidas -= 60;
+        // Morreu para o pirata: a pontuação deve ficar a 0
+        vidas = 0;
         if (currentGUI != null) {
             currentGUI.updateLives(vidas);
         }
