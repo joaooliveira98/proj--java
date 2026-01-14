@@ -127,7 +127,7 @@ public class WelcomeWindow extends JFrame {
     }
 
     /**
-     * Metodo publico para obter o nome do jogador
+     * Metodo para obter o nome do jogador
      * @return String com o nome do jogador
      */
     public String getPlayerName() {

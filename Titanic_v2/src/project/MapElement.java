@@ -15,7 +15,7 @@ public abstract class MapElement {
     // Coluna onde o elemento esta posicionado no mapa
     protected int col;
     
-    // Simbolo que representa o elemento (B=Barco, R=Rochedo, M=Sereia, etc.)
+    // Simbolo que representa o elemento (B=Barco, R=Rocha, M=Sereia, etc.)
     protected char symbol;
 
     /**

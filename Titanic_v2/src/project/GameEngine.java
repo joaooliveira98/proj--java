@@ -45,7 +45,7 @@ public class GameEngine {
     public GameEngine(ArrayList<String> levelFiles, String playerName) {
         this.levelFiles = levelFiles;
         this.playerName = playerName;
-        // Carrega o primeiro nivel (indice 0) se existir
+        // Carrega o primeiro nivel (indice 0)
         if (levelFiles != null && !levelFiles.isEmpty()) {
             loadLevel(0);
         }
@@ -162,7 +162,6 @@ public class GameEngine {
 
         // Verifica se o jogador ficou sem vidas
         if (lives <= 0) {
-            // Centraliza a logica num so local
             gameOver();
         }
     }
@@ -198,7 +197,7 @@ public class GameEngine {
 
     /**
     * Termina o jogo imediatamente (usado quando o barco toca no pirata)
-    * Mostra mensagem de Game Over com botao personalizado, guarda a pontuacao e abre a tabela
+    * Mostra mensagem de Game Over
      */
     public void gameOver() {
         if (gameOverTriggered) {
@@ -209,7 +208,7 @@ public class GameEngine {
         saveScore();
         
         if (currentGUI != null) {           
-            // Cria um dialogo personalizado com botao "Ver Pontuacoes"
+            // Cria um dialogo personalizado com botao "View Scores"
             // Passa currentGUI em vez de null para aparecer no meio da janela do jogo
             Object[] options = {"View Scores"};
             JOptionPane.showOptionDialog(currentGUI,

@@ -186,9 +186,9 @@ public class Map {
             // Verifica colisoes apos o movimento
             char current = grid.get(boat.getRow()).charAt(boat.getCol());
             
-            // Se tocou no pirata, perde 60 vidas e Game Over imediato
+            // Se tocou no pirata e Game Over imediato
             if (current == 'P') {
-                engine.pirateHit();  // Perde 10 vidas e Game Over automatico
+                engine.pirateHit();
             } 
             // Se tocou num explosivo, perde 5 vidas
             else if (current == 'E') {
@@ -209,7 +209,7 @@ public class Map {
             if (v.getRow() != boat.getRow() || v.getCol() != boat.getCol()) {
                 // Move o barco para esse vortice
                 boat.move(v.getRow(), v.getCol());
-                break; // Sai do ciclo
+                break;
             }
         }
     }
@@ -220,7 +220,7 @@ public class Map {
      * @param col Coluna da sereia
      */
     private void removeMermaid(int row, int col) {
-        // Substitui 'M' por '.' (água)
+        // Substitui 'M' por '.' (agua)
         StringBuilder sb = new StringBuilder(grid.get(row));
         sb.setCharAt(col, '.');
         grid.set(row, sb.toString());
@@ -274,7 +274,7 @@ public class Map {
     }
 
     /**
-    * Verifica se o barco tocou na ilha (objetivo do nivel)
+    * Verifica se o barco tocou na ilha
     * @return true se tocou na ilha, false caso contrario
      */
     public boolean touchedIsland() {
