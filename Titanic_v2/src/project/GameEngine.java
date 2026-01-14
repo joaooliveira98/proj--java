@@ -6,102 +6,104 @@ import java.io.PrintWriter;
 import java.util.*;
 
 /**
- * Classe GameEngine - Motor do jogo que controla toda a lógica do Titanic
- * Responsável por:
- * - Carregar e gerir os níveis do jogo
+ * Classe GameEngine - Motor do jogo que controla toda a logica do Titanic
+ * Responsavel por:
+ * - Carregar e gerir os niveis do jogo
  * - Controlar as vidas do jogador
- * - Gerir transições entre níveis
- * - Guardar pontuações no ficheiro ranking.txt
- * - Controlar condições de vitória e derrota
+ * - Gerir transicoes entre niveis
+ * - Guardar pontuacoes no ficheiro ranking.txt
+ * - Controlar condicoes de vitoria e derrota
  */
 public class GameEngine {
 
-    // Lista com os caminhos dos ficheiros de níveis
+    // Lista com os caminhos dos ficheiros de niveis
     private ArrayList<String> levelFiles;
     
-    // Indice do nível atual (começa em 0)
+    // Indice do nivel atual (comeca em 0)
     private int currentLevel = 0;
     
     // Mapa atual sendo jogado
     private Map currentMap;
     
-    // Referência à interface gráfica atual
+    // Referencia a interface grafica atual
     private GUI currentGUI;
     
     // Vidas do jogador
-    private int vidas = 60;
+    private int lives = 60;
     
     // Nome do jogador
     private String playerName;
 
-    // Flag para evitar múltiplos Game Over (duplicados)
+    // Flag para evitar multiplos Game Over (duplicados)
     private boolean gameOverTriggered = false;
 
     /**
-     * Construtor do GameEngine
-     * @param levelFiles Lista com os caminhos dos ficheiros de níveis
+    * Construtor do GameEngine
+    * @param levelFiles Lista com os caminhos dos ficheiros de niveis
      * @param playerName Nome do jogador
      */
     public GameEngine(ArrayList<String> levelFiles, String playerName) {
         this.levelFiles = levelFiles;
         this.playerName = playerName;
-        // Carrega o primeiro nível (índice 0)
-        loadLevel(0);
+        // Carrega o primeiro nivel (indice 0) se existir
+        if (levelFiles != null && !levelFiles.isEmpty()) {
+            loadLevel(0);
+        }
     }
 
     /**
-     * Obtém o nome do jogador
-     * @return Nome do jogador
+      * Obtem o nome do jogador
+      * @return Nome do jogador
      */
     public String getPlayerName() {
         return playerName;
     }
 
     /**
-     * Carrega um nível específico do jogo
-     * @param levelIndex Indice do nível a carregar (0 = primeiro nível)
+    * Carrega um nivel especifico do jogo
+    * @param levelIndex Indice do nivel a carregar (0 = primeiro nivel)
      */
     public void loadLevel(int levelIndex) {
-        // Verifica se o índice é válido
+        // Verifica se o indice e valido
         if (levelIndex < levelFiles.size()) {
             currentLevel = levelIndex;
-            // Cria um novo mapa a partir do ficheiro do nível
+            // Cria um novo mapa a partir do ficheiro do nivel
             currentMap = new Map(levelFiles.get(levelIndex), this);
         }
     }
 
     /**
-     * Avança para o próximo nível ou termina o jogo se for o último
+    * Avanca para o proximo nivel ou termina o jogo se for o ultimo
      */
     public void nextLevel() {
-        // Verifica se há mais níveis disponíveis
+        // Verifica se ha mais niveis disponiveis
         if (currentLevel + 1 < levelFiles.size()) {
-            // Carrega o próximo nível
+            // Carrega o proximo nivel
             loadLevel(currentLevel + 1);
         } else {
-            // Último nível completado - fim do jogo
+            // Ultimo nivel completado - fim do jogo
             if (currentGUI != null) {
-                currentGUI.alert("Fim do Jogo!");
+                currentGUI.alert("End of Game!");
             }
             // Fecha a janela do jogo
             currentGUI.dispose();
-            // Guarda a pontuação no ficheiro
-            salvarPontuacao();
-            // Abre a tabela de pontuações
-            new pontuacao(this);
+            // Guarda a pontuacao no ficheiro
+            saveScore();
+            // Abre a tabela de pontuacoes
+            new Scoreboard(this);
         }
     }
 
     /**
-     * Obtém o índice do nível atual
-     * @return Indice do nível atual (0 = primeiro nível)
+    * Obtem o indice do nivel atual
+    * @return Indice do nivel atual (0 = primeiro nivel)
      */
     public int getCurrentLevel() {
         return currentLevel;
     }
 
     /**
-     * Obtém o mapa atual
+    * Obtem o mapa atual
      * @return Mapa atual do jogo
      */
     public Map getCurrentMap() {
@@ -109,73 +111,73 @@ public class GameEngine {
     }
 
     /**
-     * Carrega o próximo nível (chama nextLevel())
+    * Carrega o proximo nivel (chama nextLevel())
      */
     public void loadNextLevel() {
         nextLevel();
     }
 
     /**
-     * Define a interface gráfica atual e atualiza as vidas
-     * @param gui Interface gráfica a associar ao motor do jogo
+    * Define a interface grafica atual e atualiza as vidas
+    * @param gui Interface grafica a associar ao motor do jogo
      */
     public void setCurrentGUI(GUI gui) {
         this.currentGUI = gui;
         if (this.currentGUI != null) {
-            // Atualiza a exibição de vidas na interface
-            this.currentGUI.updateLives(vidas);
+            // Atualiza a exibicao de vidas na interface
+            this.currentGUI.updateLives(lives);
         }
     }
 
     /**
-     * Obtém o número de vidas atuais do jogador
-     * @return Número de vidas restantes
+    * Obtem o numero de vidas atuais do jogador
+    * @return Numero de vidas restantes
      */
     public int getLives() {
-        return vidas;
+        return lives;
     }
 
     /**
-     * Remove uma vida do jogador
+    * Remove uma vida do jogador
      */
     public void loseLife() {
         loseLife(1);
     }
 
     /**
-     * Remove uma quantidade específica de vidas do jogador
-     * @param amount Quantidade de vidas a perder
+    * Remove uma quantidade especifica de vidas do jogador
+    * @param amount Quantidade de vidas a perder
      */
     public void loseLife(int amount) {
         if (gameOverTriggered) {
-            return; // Já terminou o jogo
+            return; // Ja terminou o jogo
         }
         // Subtrai as vidas
-        vidas -= amount;
+        lives -= amount;
         
-        // Atualiza a exibição na interface gráfica
+        // Atualiza a exibicao na interface grafica
         if (currentGUI != null) {
-            currentGUI.updateLives(vidas);
+            currentGUI.updateLives(lives);
         }
-        
+
         // Verifica se o jogador ficou sem vidas
-        if (vidas <= 0) {
-            // Centraliza a lógica num só local
+        if (lives <= 0) {
+            // Centraliza a logica num so local
             gameOver();
         }
     }
 
     /**
-     * Adiciona vidas ao jogador (usado quando toca numa sereia)
-     * @param amount Quantidade de vidas a ganhar
+    * Adiciona vidas ao jogador (usado quando toca numa sereia)
+    * @param amount Quantidade de vidas a ganhar
      */
     public void gainLife(int amount) {
         // Adiciona as vidas
-        vidas += amount;
+        lives += amount;
         
-        // Atualiza a exibição na interface gráfica
+        // Atualiza a exibicao na interface grafica
         if (currentGUI != null) {
-            currentGUI.updateLives(vidas);
+            currentGUI.updateLives(lives);
         }
     }
 
@@ -186,33 +188,33 @@ public class GameEngine {
         if (gameOverTriggered) {
             return;
         }
-        // Morreu para o pirata: a pontuação deve ficar a 0
-        vidas = 0;
+        // Morreu para o pirata: a pontuacao deve ficar a 0
+        lives = 0;
         if (currentGUI != null) {
-            currentGUI.updateLives(vidas);
+            currentGUI.updateLives(lives);
         }
         gameOver();
     }
 
     /**
-     * Termina o jogo imediatamente (usado quando o barco toca no pirata)
-     * Mostra mensagem de Game Over com botão personalizado, guarda a pontuação e abre a tabela
+    * Termina o jogo imediatamente (usado quando o barco toca no pirata)
+    * Mostra mensagem de Game Over com botao personalizado, guarda a pontuacao e abre a tabela
      */
     public void gameOver() {
         if (gameOverTriggered) {
             return; // Evita popups duplicados
         }
         gameOverTriggered = true;
-        // Guarda a pontuação no ficheiro primeiro
-        salvarPontuacao();
+        // Guarda a pontuacao no ficheiro primeiro
+        saveScore();
         
         if (currentGUI != null) {           
-            // Cria um diálogo personalizado com botão "Ver Pontuações"
+            // Cria um dialogo personalizado com botao "Ver Pontuacoes"
             // Passa currentGUI em vez de null para aparecer no meio da janela do jogo
-            Object[] options = {"Ver Pontuacoes"};
+            Object[] options = {"View Scores"};
             JOptionPane.showOptionDialog(currentGUI,
                 "Game Over!",
-                "Fim do Jogo",
+                "End of Game",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.ERROR_MESSAGE,
                 null,
@@ -221,23 +223,23 @@ public class GameEngine {
             currentGUI.dispose();
         }
         
-        // Abre a tabela de pontuações
-        new pontuacao(this);
+        // Abre a tabela de pontuacoes
+        new Scoreboard(this);
     }
 
     /**
-     * Guarda a pontuação do jogador no ficheiro ranking.txt
-     * Formato: Nome;Vidas
+    * Guarda a pontuacao do jogador no ficheiro ranking.txt
+    * Formato: Nome;Vidas
      */
-    public void salvarPontuacao() {
+    public void saveScore() {
         try (FileWriter fw = new FileWriter("ranking.txt", true);
                 PrintWriter pw = new PrintWriter(fw)) {
 
             // Escreve uma linha no formato: Nome;Vidas
-            pw.println(this.playerName + ";" + this.vidas);
+            pw.println(this.playerName + ";" + this.lives);
 
         } catch (IOException e) {
-            // Mostra erro se não conseguir guardar
+            // Mostra erro se nao conseguir guardar
             System.err.println("Erro ao salvar ranking: " + e.getMessage());
         }
     }

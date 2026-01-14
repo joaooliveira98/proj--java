@@ -8,12 +8,12 @@ package project;
 public class Pirate extends MapElement {
 
     /**
-     * Construtor do Pirate
-     * @param row Linha onde o pirata está posicionado
-     * @param col Coluna onde o pirata está posicionado
+    * Construtor do Pirate
+    * @param row Linha onde o pirata esta posicionado
+    * @param col Coluna onde o pirata esta posicionado
      */
     public Pirate(int row, int col) {
-        // Chama o construtor da classe pai com símbolo 'P'
+        // Chama o construtor da classe pai com simbolo 'P'
         super(row, col, 'P');
     }
 

@@ -5,39 +5,39 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 /**
- * Classe GUI - Interface Gráfica do Utilizador
- * Responsável por:
+ * Classe GUI - Interface Grafica do Utilizador
+ * Responsavel por:
  * - Desenhar o mapa do jogo visualmente
  * - Capturar inputs do teclado (setas) para mover o barco
- * - Atualizar a exibição das vidas
+ * - Atualizar a exibicao das vidas
  * - Mostrar mensagens ao jogador
- * - Gerir transições entre níveis
+ * - Gerir transicoes entre niveis
  */
 public class GUI extends JFrame implements KeyListener {
 
     // Mapa atual
     private Map map;
     
-    // Motor do jogo para controlar a lógica
+    // Motor do jogo para controlar a logica
     private GameEngine engine;
     
-    // Painel onde o mapa é desenhado
+    // Painel onde o mapa e desenhado
     private JPanel panel;
     
     // Etiqueta que mostra as vidas do jogador
     private JLabel livesLabel;
     
-    // Nome do jogador (para exibir no título)
+    // Nome do jogador (para exibir no titulo)
     private String playerName;
 
     // Icones dos elementos do jogo
     private ImageIcon boatImg, islandImg, rockImg, mermaidImg, pirateImg, vortexImg, explosiveImg;
 
     /**
-     * Construtor da GUI
-     * @param map Mapa a ser exibido
-     * @param engine Motor do jogo
-     * @param playerName Nome do jogador
+    * Construtor da GUI
+    * @param map Mapa a ser exibido
+    * @param engine Motor do jogo
+    * @param playerName Nome do jogador
      */
     public GUI(Map map, GameEngine engine, String playerName) {
         this.map = map;
@@ -46,35 +46,35 @@ public class GUI extends JFrame implements KeyListener {
         // Associa esta GUI ao motor do jogo
         engine.setCurrentGUI(this);
 
-        // Carrega as imagens dos ícones
+        // Carrega as imagens dos icones
         loadIcons();
 
         // Cria o painel principal com layout de grelha
         panel = new JPanel();
         panel.setLayout(new GridLayout(
-            map.getGrid().size(),            // Número de linhas
-            map.getGrid().get(0).length()    // Número de colunas
+            map.getGrid().size(),            // Numero de linhas
+            map.getGrid().get(0).length()    // Numero de colunas
         ));
 
         // Cria painel superior para mostrar as vidas
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        livesLabel = new JLabel("Vidas: " + engine.getLives());
+        livesLabel = new JLabel("Lives: " + engine.getLives());
         topPanel.add(livesLabel);
         add(topPanel, BorderLayout.NORTH);
 
         // Desenha o mapa pela primeira vez
         drawMap();
 
-        // Atualiza o título da janela com o nível e nome
+        // Atualiza o titulo da janela com o nivel e nome
         updateTitle();
         
         // Define o tamanho da janela
         setSize(600, 600);
         
-        // Centraliza a janela no ecrã
+        // Centraliza a janela no ecra
         setLocationRelativeTo(null);
         
-        // Define que a aplicação fecha ao fechar a janela
+        // Define que a aplicacao fecha ao fechar a janela
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         // Adiciona o painel à janela
@@ -83,12 +83,12 @@ public class GUI extends JFrame implements KeyListener {
         // Adiciona listener de teclado para capturar as setas
         addKeyListener(this);
         
-        // Torna a janela visível
+        // Torna a janela visivel
         setVisible(true);
     }
 
     /**
-     * Carrega as imagens dos ícones dos elementos do jogo
+    * Carrega as imagens dos icones dos elementos do jogo
      */
     private void loadIcons() {
         boatImg = new ImageIcon("bin/resources/icons/boat.png");
@@ -101,21 +101,21 @@ public class GUI extends JFrame implements KeyListener {
     }
 
     /**
-     * Atualiza o título da janela com o nível atual e nome do jogador
+    * Atualiza o titulo da janela com o nivel atual e nome do jogador
      */
     private void updateTitle() {
         setTitle("Titanic - Level " + (engine.getCurrentLevel() + 1) + " - " + playerName);
     }
 
     /**
-     * Desenha/redesenha o mapa completo na interface
-     * Percorre todas as células e coloca o ícone apropriado
+    * Desenha/redesenha o mapa completo na interface
+    * Percorre todas as celulas e coloca o icone apropriado
      */
     private void drawMap() {
         // Remove todos os componentes antigos
         panel.removeAll();
 
-        // Obtém a grelha e o barco
+        // Obtem a grelha e o barco
         ArrayList<String> grid = map.getGrid();
         Boat boat = map.getBoat();
 
@@ -123,16 +123,16 @@ public class GUI extends JFrame implements KeyListener {
         for (int r = 0; r < grid.size(); r++) {
             for (int c = 0; c < grid.get(r).length(); c++) {
 
-                // Cria uma célula (painel) com borda
+                // Cria uma celula (painel) com borda
                 JPanel cell = new JPanel(new BorderLayout());
                 cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-                // Se for a posição do barco, mostra o ícone do barco
+                // Se for a posicao do barco, mostra o icone do barco
                 if (boat.getRow() == r && boat.getCol() == c) {
                     cell.add(new JLabel(boatImg), BorderLayout.CENTER);
                     cell.setBackground(new Color(0, 70, 204)); // Azul escuro
                 } else {
-                    // Caso contrário, verifica o símbolo da célula
+                    // Caso contrario, verifica o simbolo da celula
                     char elem = grid.get(r).charAt(c);
 
                     switch (elem) {
@@ -152,7 +152,7 @@ public class GUI extends JFrame implements KeyListener {
                              cell.add(new JLabel(mermaidImg)); 
                              cell.setBackground(new Color(0, 102, 204));
                              break;
-                        case 'V': // Vórtice
+                        case 'V': // Vortice
                             cell.add(new JLabel(vortexImg));
                             cell.setBackground(new Color(0, 102, 204));
                             break;
@@ -166,34 +166,34 @@ public class GUI extends JFrame implements KeyListener {
                         case 'X': // Fora do mapa
                             cell.setBackground(Color.GRAY); 
                             break;
-                        default:  // Qualquer outro símbolo
+                        default:  // Qualquer outro simbolo
                             cell.setBackground(new Color(0, 102, 204));
                     }
                 }
 
-                // Adiciona a célula ao painel
+                // Adiciona a celula ao painel
                 panel.add(cell);
             }
         }
 
-        // Atualiza a exibição
+        // Atualiza a exibicao
         panel.revalidate();
         panel.repaint();
     }
 
     /**
-     * Atualiza a exibição das vidas na interface
-     * @param lives Número de vidas atuais
+    * Atualiza a exibicao das vidas na interface
+    * @param lives Numero de vidas atuais
      */
     public void updateLives(int lives) {
         if (livesLabel != null) {
-            livesLabel.setText("Vidas: " + lives);
+            livesLabel.setText("Lives: " + lives);
         }
     }
 
     /**
-     * Mostra uma mensagem ao jogador numa janela de diálogo
-     * @param message Mensagem a exibir
+    * Mostra uma mensagem ao jogador numa janela de dialogo
+    * @param message Mensagem a exibir
      */
     public void alert(String message) {
         JOptionPane.showMessageDialog(this, message);
@@ -263,7 +263,7 @@ public class GUI extends JFrame implements KeyListener {
         }
     }
 
-    // Métodos da interface KeyListener
+    // Metodos da interface KeyListener
     @Override public void keyReleased(KeyEvent e) {}
     @Override public void keyTyped(KeyEvent e) {}
 }
